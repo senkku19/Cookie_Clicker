@@ -2,7 +2,7 @@
   "name": "cookie-clicker",
   "private": true,
   "version": "1.0.0",
-  "homepage": "https://github.com/senkku19/Cookie_ClickerA",
+  "homepage": "https://github.com/senkku19/Cookie_Clicker",
   "type": "module",
   "scripts": {
     "dev": "vite",
