@@ -5,33 +5,71 @@ import audio from "../assets/crunch.mp3";
 
 export default function CookieClicker({ setPoints }) {
     const [particles, setParticles] = useState([]);
-    const crunchSound = useRef(new Audio(audio));
     const imgRef = useRef(null);
 
+    const audioContextRef = useRef(null);
+    const audioBufferRef = useRef(null);
+
     useEffect(() => {
-        const el = imgRef.current;
-        if (!el) return;
-        const prevent = (e) => e.preventDefault();
-        el.addEventListener("touchstart", prevent, { passive: false });
-        return () => el.removeEventListener("touchstart", prevent);
+        const initAudio = async () => {
+            const AudioContextClass =
+                window.AudioContext || window.webkitAudioContext;
+
+            const context = new AudioContextClass();
+            audioContextRef.current = context;
+
+            const response = await fetch(audio);
+            const arrayBuffer = await response.arrayBuffer();
+
+            audioBufferRef.current =
+                await context.decodeAudioData(arrayBuffer);
+        };
+
+        initAudio();
     }, []);
 
-    const handleClick = (e) => {
-        setPoints();
-        crunchSound.current.currentTime = 0;
-        crunchSound.current.play();
+    const playCrunch = () => {
+        if (!audioContextRef.current || !audioBufferRef.current) return;
 
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const id = Date.now();
+        if (audioContextRef.current.state === "suspended") {
+            audioContextRef.current.resume();
+        }
 
-        setParticles((prev) => [...prev, { id, x, y }]);
+        const source = audioContextRef.current.createBufferSource();
+        source.buffer = audioBufferRef.current;
 
-        setTimeout(() => {
-            setParticles((prev) => prev.filter((p) => p.id !== id));
-        }, 800);
+        const gainNode = audioContextRef.current.createGain();
+        gainNode.gain.value = 0.4;
+
+        source.connect(gainNode);
+        gainNode.connect(audioContextRef.current.destination);
+
+        source.start(0);
     };
+
+        useEffect(() => {
+            const el = imgRef.current;
+            if(!el) return;
+            const prevent = (e) => e.preventDefault();
+            el.addEventListener("touchstart", prevent, { passive: false });
+            return () => el.removeEventListener("touchstart", prevent);
+        }, [])
+
+        const handleClick = (e) => {
+            setPoints();
+            playCrunch();
+
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const id = Date.now();
+
+            setParticles((prev) => [...prev, { id, x, y }]);
+
+            setTimeout(() => {
+                setParticles((prev) => prev.filter((p) => p.id !== id));
+            }, 800);
+        };
 
     return (
         <div style={{ position: "relative", display: "inline-block" }}>
