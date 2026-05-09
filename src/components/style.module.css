@@ -1,15 +1,16 @@
 .cookie {
-    width: 280px;
-    height: 280px;
-    margin: 1.5rem;
+    max-width: 280px;
+    width: 100%;
+    margin: 0 auto;
     cursor: pointer;
-
     transition: transform 0.1s ease, filter 0.1s ease;
-    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
-    
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15));
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 .cookie:hover {
@@ -35,6 +36,7 @@
         opacity: 1;
         transform: translateY(0);
     }
+
     100% {
         opacity: 0;
         transform: translateY(-50px);

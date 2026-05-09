@@ -6,7 +6,6 @@ export default function CookieClicker() {
     const [points, setPoints] = useState(0);
 
     return (
-    <div className={style.container}>
         <div className={style.card}>
             <h1 className={style.title}>🍪Cookie Clicker</h1>
             <p className={style.subtitle}>Click the cookie and earn points</p>
@@ -19,5 +18,5 @@ export default function CookieClicker() {
             <Cookie setPoints={() => setPoints((prev) => prev + 1)} />
 
         </div>
-    </div>
-    );}
+    );
+}
