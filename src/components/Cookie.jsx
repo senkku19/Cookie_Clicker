@@ -32,7 +32,7 @@ export default function CookieClicker({ setPoints }) {
                 alt="Cookie"
                 draggable="false"
                 className={style.cookie}
-                onClick={handleClick}
+                onPointerDown={handleClick}
                 tabIndex={0}
                 onKeyDown={(e) => e.key === "Enter" && handleClick(e)}
             />

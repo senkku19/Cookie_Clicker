@@ -8,7 +8,7 @@
     user-select: none;
     -webkit-user-select: none;
     -webkit-user-drag: none;
-    touch-action: manipulation;
+    touch-action: none;
     -webkit-tap-highlight-color: transparent;
     outline: none;
 }
